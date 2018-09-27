@@ -1,5 +1,5 @@
 package cmd
 
-func nw(args []string) {
+func neW(args []string) {
 
 }

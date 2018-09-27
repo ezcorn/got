@@ -1,5 +1,7 @@
 package cmd
 
-func mk(args []string) {
+import "fmt"
 
+func mAke(args []string) {
+	fmt.Println(args)
 }

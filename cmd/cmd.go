@@ -1,44 +1,31 @@
 package cmd
 
-import "os"
-
-const (
-	HELP = "help"
-	NEW  = "new"
-	MAKE = "make"
+import (
+	"os"
+	"strings"
 )
 
-type (
-	Cmd struct {
-		word string
-		exec func(args []string)
-	}
+const (
+	HELP   = "help"
+	NEW    = "new"
+	MAKE   = "make"
+	UPDATE = "update"
 )
 
 var (
-	cmdRegistry = make(map[string]*Cmd)
+	cmdRegistry = make(map[string]func(args []string))
 )
 
-func reg(word string, exec func(args []string)) {
-	cmdRegistry[word] = &Cmd{
-		word: word,
-		exec: func(args []string) {
-			if args == nil || len(args) == 0 || args[0] != word {
-				return
-			}
-			exec(args[1:])
-		},
+func Exec() {
+	words := strings.Split(os.Args[1], ":")
+	if cmd, ok := cmdRegistry[words[0]]; ok {
+		cmd(append(words[1:], os.Args[2:]...))
 	}
 }
 
 func MakeCmdRegistry() {
-	reg(HELP, help)
-	reg(NEW, nw)
-	reg(MAKE, mk)
-}
-
-func Exec() {
-	if cmd, ok := cmdRegistry[os.Args[1]]; ok {
-		cmd.exec(os.Args[1:])
-	}
+	cmdRegistry[HELP] = help
+	cmdRegistry[NEW] = neW
+	cmdRegistry[MAKE] = mAke
+	cmdRegistry[UPDATE] = update
 }
