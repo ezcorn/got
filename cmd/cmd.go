@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -57,4 +59,20 @@ func pathExists(path string) bool {
 
 func gitClone(repo string, name string) {
 	exec.Command("git", []string{"clone", repo, name}...).Run()
+}
+
+func upFirst(str string) string {
+	for i, v := range str {
+		return string(unicode.ToUpper(v)) + str[i+1:]
+	}
+	return ""
+}
+
+func cleanAllSymbol(str string) string {
+	result := ""
+	arr := regexp.MustCompile("[A-Za-z0-9]*").FindAllString(str, len(str))
+	for _, val := range arr {
+		result += val
+	}
+	return result
 }
