@@ -56,5 +56,5 @@ func pathExists(path string) bool {
 }
 
 func gitClone(repo string, name string) {
-	exec.Command("git", []string{"clone", repo, name}...).Start()
+	exec.Command("git", []string{"clone", repo, name}...).Run()
 }

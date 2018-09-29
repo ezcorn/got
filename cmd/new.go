@@ -1,5 +1,7 @@
 package cmd
 
+import "os"
+
 func neW(args []string) {
 	if len(args) == 0 {
 		printInterrupt("Please enter the project name")
@@ -9,5 +11,6 @@ func neW(args []string) {
 		printInterrupt(`Folder "` + projectName + `" already exists`)
 	}
 	gitClone("https://github.com/ezcorn/goe-example.git", projectName)
-	printInterrupt(`New project [ ` + projectName + ` ] build complete`)
+	os.RemoveAll(projectName + "/.git")
+	printInterrupt(`New project [ ` + projectName + ` ] building complete`)
 }
