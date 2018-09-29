@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"regexp"
@@ -46,17 +47,6 @@ func printInterrupt(content string) {
 	os.Exit(0)
 }
 
-func pathExists(path string) bool {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true
-	}
-	if os.IsNotExist(err) {
-		return false
-	}
-	return false
-}
-
 func gitClone(repo string, name string) {
 	exec.Command("git", []string{"clone", repo, name}...).Run()
 }
@@ -75,4 +65,27 @@ func cleanAllSymbol(str string) string {
 		result += val
 	}
 	return result
+}
+
+func fileExists(fileName string) bool {
+	_, err := os.Stat(fileName)
+	return !os.IsNotExist(err)
+}
+
+func readFile(fileName string) string {
+	buf, err := ioutil.ReadFile(fileName)
+	if os.IsNotExist(err) {
+		return ""
+	}
+	return string(buf)
+}
+
+func fileContainsString(fileName string, content string) bool {
+	lines := strings.Split(readFile(fileName), "\n")
+	for _, line := range lines {
+		if strings.TrimSpace(line) == content {
+			return true
+		}
+	}
+	return false
 }

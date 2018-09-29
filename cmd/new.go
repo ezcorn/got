@@ -7,7 +7,7 @@ func neW(args []string) {
 		printInterrupt("Please enter the project name")
 	}
 	projectName := args[0]
-	if pathExists(projectName) {
+	if fileExists(projectName) {
 		printInterrupt(`Folder "` + projectName + `" already exists`)
 	}
 	gitClone("https://github.com/ezcorn/goe-example.git", projectName)
