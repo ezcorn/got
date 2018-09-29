@@ -10,7 +10,7 @@ func neW(args []string) {
 	if fileExists(projectName) {
 		printInterrupt(`Folder "` + projectName + `" already exists`)
 	}
-	gitClone("https://github.com/ezcorn/goe-example.git", projectName)
+	gitClone("https://github.com/ezcorn/goe-empty.git", projectName)
 	os.RemoveAll(projectName + "/.git")
 	printInterrupt(`New project [ ` + projectName + ` ] building complete`)
 }
