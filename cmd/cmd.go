@@ -48,7 +48,10 @@ func printInterrupt(content string) {
 }
 
 func gitClone(repo string, name string) {
-	exec.Command("git", []string{"clone", repo, name}...).Run()
+	err := exec.Command("git", []string{"clone", repo, name}...).Run()
+	if err != nil {
+		printInterrupt(err.Error())
+	}
 }
 
 func upFirst(str string) string {
