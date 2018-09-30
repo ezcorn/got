@@ -8,7 +8,7 @@ import (
 func main() {
 	cmd.MakeCmdRegistry()
 	if len(os.Args) == 1 {
-		os.Args = append(os.Args, cmd.HELP)
+		os.Args = append(os.Args, cmd.CommandHelp)
 	}
 	cmd.Exec()
 }

@@ -3,15 +3,19 @@ package cmd
 import (
 	"io/ioutil"
 	"os"
+	"regexp"
+	"strings"
 )
 
-const goeServer = "server.go"
-const goeBeacon = "goe.InitServer()"
+const (
+	goeServer = "server.go"
+	goeBeacon = "goe.InitServer()"
 
-const makeError001 = "Please enter the type and name to be make"
-const makeError002 = "The current dir is not a goe project"
-const makeError003 = "The first letter of the name cannot be a number"
-const makeError004 = " is exist"
+	makeError001 = "Please enter the type and name to be make"
+	makeError002 = "The current dir is not a goe project"
+	makeError003 = "The first letter of the name cannot be a number"
+	makeError004 = " is exist"
+)
 
 func mAke(args []string) {
 	if len(args) < 2 {
@@ -20,7 +24,7 @@ func mAke(args []string) {
 	if !fileExists(goeServer) || !fileContainsString(goeServer, goeBeacon) {
 		printInterrupt(makeError002)
 	}
-	typeList := map[string]func(actionName string, routeName string) string{
+	typeList := map[string]func(string, string) string{
 		"action": actionTemplate,
 		"listen": listenTemplate,
 	}
@@ -32,11 +36,31 @@ func mAke(args []string) {
 	for t, f := range typeList {
 		if t == makeType {
 			if !fileExists(makeType) {
-				os.Mkdir(makeType, 0755)
+				os.Mkdir(makeType, filePermission)
 			}
 			var writePath = makeType + "/" + makeName + ".go"
 			if !fileExists(writePath) {
-				ioutil.WriteFile(writePath, []byte(f(upFirst(makeName), makeName)), 0755)
+				// Make items
+				ioutil.WriteFile(writePath, []byte(
+					f(upFirst(makeName),
+						makeName)), filePermission)
+
+				// Register make items
+				content := strings.Replace(
+					readFile(goeServer),
+					goeBeacon,
+					registerTemplate(
+						makeType,
+						makeName)+"\n\t"+goeBeacon, -1)
+
+				// Check import
+				importStr := regexp.MustCompile(`import ([^)]+)`).FindString(content)
+				importTypeStr := "\t" + `"./` + makeType + `"`
+
+				if !strContainsString(importStr, importTypeStr) {
+					content = strings.Replace(content, importStr, importStr+importTypeStr+"\n", -1)
+				}
+				ioutil.WriteFile(goeServer, []byte(content), filePermission)
 			} else {
 				printInterrupt(writePath + makeError004)
 			}
@@ -74,4 +98,12 @@ func ` + actionName + `Listen() *goe.Listen {
 	})
 }
 `
+}
+
+func registerTemplate(regType string, routeName string) string {
+	upFirstType := upFirst(regType)
+	upFirstRoute := upFirst(routeName)
+	result := `// Register ` + upFirstType + " " + upFirstRoute + "\n\tgoe.Reg" +
+		upFirstType + "(" + regType + "." + upFirstRoute + upFirstType + ")\n"
+	return result
 }

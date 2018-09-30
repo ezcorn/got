@@ -11,10 +11,12 @@ import (
 )
 
 const (
-	HELP   = "help"
-	NEW    = "new"
-	MAKE   = "make"
-	UPDATE = "update"
+	CommandHelp   = "help"
+	CommandNew    = "new"
+	CommandMake   = "make"
+	CommandUpdate = "update"
+
+	filePermission = 0755
 )
 
 type (
@@ -36,10 +38,10 @@ func Exec() {
 }
 
 func MakeCmdRegistry() {
-	cmdRegistry[HELP] = &cmd{exec: help, note: HELP}
-	cmdRegistry[NEW] = &cmd{exec: neW, note: NEW}
-	cmdRegistry[MAKE] = &cmd{exec: mAke, note: MAKE}
-	cmdRegistry[UPDATE] = &cmd{exec: update, note: UPDATE}
+	cmdRegistry[CommandHelp] = &cmd{exec: help, note: CommandHelp}
+	cmdRegistry[CommandNew] = &cmd{exec: neW, note: CommandNew}
+	cmdRegistry[CommandMake] = &cmd{exec: mAke, note: CommandMake}
+	cmdRegistry[CommandUpdate] = &cmd{exec: update, note: CommandUpdate}
 }
 
 func printInterrupt(content string) {
@@ -83,12 +85,16 @@ func readFile(fileName string) string {
 	return string(buf)
 }
 
-func fileContainsString(fileName string, content string) bool {
-	lines := strings.Split(readFile(fileName), "\n")
+func strContainsString(str string, c string) bool {
+	lines := strings.Split(str, "\n")
 	for _, line := range lines {
-		if strings.TrimSpace(line) == content {
+		if strings.TrimSpace(line) == strings.TrimSpace(c) {
 			return true
 		}
 	}
 	return false
+}
+
+func fileContainsString(fileName string, c string) bool {
+	return strContainsString(readFile(fileName), c)
 }
