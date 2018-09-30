@@ -14,6 +14,7 @@ const (
 	CommandHelp   = "help"
 	CommandNew    = "new"
 	CommandMake   = "make"
+	CommandLink   = "link"
 	CommandUpdate = "update"
 
 	filePermission = 0755
@@ -41,6 +42,7 @@ func MakeCmdRegistry() {
 	cmdRegistry[CommandHelp] = &cmd{exec: help, note: CommandHelp}
 	cmdRegistry[CommandNew] = &cmd{exec: neW, note: CommandNew}
 	cmdRegistry[CommandMake] = &cmd{exec: mAke, note: CommandMake}
+	cmdRegistry[CommandLink] = &cmd{exec: link, note: CommandLink}
 	cmdRegistry[CommandUpdate] = &cmd{exec: update, note: CommandUpdate}
 }
 
