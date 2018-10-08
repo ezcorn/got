@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	goeServer = "server.go"
-	goeBeacon = "goe.InitServer()"
+	goeServer     = "server.go"
+	goeBeacon     = "goe.InitServer()"
+	goeTypeAction = "action"
+	goeTypeListen = "listen"
 
 	makeError001 = "Please enter the type and name to be make"
 	makeError002 = "The current dir is not a goe project"
@@ -21,12 +23,10 @@ func mAke(args []string) {
 	if len(args) < 2 {
 		printInterrupt(makeError001)
 	}
-	if !fileExists(goeServer) || !fileContainsString(goeServer, goeBeacon) {
-		printInterrupt(makeError002)
-	}
+	checkIsGoeProject()
 	typeList := map[string]func(string, string) string{
-		"action": actionTemplate,
-		"listen": listenTemplate,
+		goeTypeAction: actionTemplate,
+		goeTypeListen: listenTemplate,
 	}
 	makeType := args[0]
 	makeName := cleanAllSymbol(args[1])
@@ -65,6 +65,12 @@ func mAke(args []string) {
 				printInterrupt(writePath + makeError004)
 			}
 		}
+	}
+}
+
+func checkIsGoeProject() {
+	if !fileExists(goeServer) || !fileContainsString(goeServer, goeBeacon) {
+		printInterrupt(makeError002)
 	}
 }
 

@@ -13,6 +13,7 @@ import (
 const (
 	CommandHelp   = "help"
 	CommandNew    = "new"
+	CommandDel    = "del"
 	CommandMake   = "make"
 	CommandLink   = "link"
 	CommandUpdate = "update"
@@ -41,6 +42,7 @@ func Exec() {
 func MakeCmdRegistry() {
 	cmdRegistry[CommandHelp] = &cmd{exec: help, note: CommandHelp}
 	cmdRegistry[CommandNew] = &cmd{exec: neW, note: CommandNew}
+	cmdRegistry[CommandDel] = &cmd{exec: del, note: CommandDel}
 	cmdRegistry[CommandMake] = &cmd{exec: mAke, note: CommandMake}
 	cmdRegistry[CommandLink] = &cmd{exec: link, note: CommandLink}
 	cmdRegistry[CommandUpdate] = &cmd{exec: update, note: CommandUpdate}
