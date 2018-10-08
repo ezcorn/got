@@ -15,16 +15,15 @@ func link(args []string) {
 	}
 	checkIsGoeProject()
 
-	content := strings.Replace(
+	ioutil.WriteFile(goeServer, []byte(strings.Replace(
 		readFile(goeServer), goeBeacon,
-		relateTemplate(args[1], args[0])+"\n\t"+goeBeacon, -1)
-	ioutil.WriteFile(goeServer, []byte(content), filePermission)
+		relateTemplate(args[1], args[0])+"\n\t"+goeBeacon, -1)), filePermission)
 }
 
 func relateTemplate(routeName string, listenName string) string {
 	return `// Relate ` +
 		routeName + " to " +
-		listenName + "\n\t" + `goe.RelateActionToListen("/` +
+		listenName + "\n\t" + `goe.RelateActionToListen("` +
 		routeName + `", "` +
 		listenName + `")` + "\n"
 }
