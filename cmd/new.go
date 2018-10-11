@@ -1,6 +1,10 @@
 package cmd
 
-import "os"
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
 func neW(args []string) {
 	if len(args) == 0 {
@@ -12,5 +16,9 @@ func neW(args []string) {
 	}
 	gitClone("https://github.com/ezcorn/goe-base.git", projectName)
 	os.RemoveAll(projectName + "/.git")
+
+	serverFile := projectName + "/server.go"
+	ioutil.WriteFile(serverFile, []byte(fmt.Sprintf(readFile(serverFile), projectName)), 0755)
+
 	printInterrupt(`New project [ ` + projectName + ` ] building complete`)
 }

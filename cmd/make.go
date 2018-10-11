@@ -9,7 +9,7 @@ import (
 
 const (
 	goeServer     = "server.go"
-	goeBeacon     = "goe.InitServer()"
+	goeBeacon     = "goe.InitServer(serverName)"
 	goeTypeAction = "action"
 	goeTypeListen = "listen"
 
