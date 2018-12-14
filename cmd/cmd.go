@@ -11,12 +11,21 @@ import (
 )
 
 const (
-	CommandHelp   = "help"
-	CommandNew    = "new"
-	CommandDel    = "del"
-	CommandMake   = "make"
-	CommandLink   = "link"
-	CommandUpdate = "update"
+	CommandHelp   = "help"   // 帮助文档	got help
+	CommandNew    = "new"    // 新建服务 got new < projectName >
+	CommandMake   = "make"   // 新建模块 got make:< moduleName > < paramString >
+	CommandDel    = "del"    // 删除模块
+	CommandJoin   = "join"   // 把一个server加入生态
+	CommandUnion  = "union"  // 联合两个生态
+	CommandUpdate = "update" // 更新本体
+
+	// join:
+	//		申请一个port
+	//		通过这个port生成一个server
+	//		如果这个server的name已经在生态中存在,则直接派生
+	//		如果这个server的name不存在生态中,则初始化一个新种类的生命形式
+	//		获取/apis/supplier来构建需要join的服务
+	//		构建完毕后,执行/apis/register
 
 	filePermission = 0755
 )
@@ -44,7 +53,6 @@ func MakeCmdRegistry() {
 	cmdRegistry[CommandNew] = &cmd{exec: neW, note: CommandNew}
 	cmdRegistry[CommandDel] = &cmd{exec: del, note: CommandDel}
 	cmdRegistry[CommandMake] = &cmd{exec: mAke, note: CommandMake}
-	cmdRegistry[CommandLink] = &cmd{exec: link, note: CommandLink}
 	cmdRegistry[CommandUpdate] = &cmd{exec: update, note: CommandUpdate}
 }
 
